@@ -1,4 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using AutoMapper;
+using SocialKpiApi.Models;
+using SocialKpiApi.Infrastructure.AutoMapper;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +13,16 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new() { Title = builder.Environment.ApplicationName, Version = "v1" });
 });
+
+// Add AutoMapper as a service.
+var mapperConfig = new MapperConfiguration(mc =>
+{
+    mc.AddProfile(new EventAutoMapperProfile());
+    mc.AddProfile(new EmployeeAutoMapperProfile());
+});
+
+IMapper mapper = mapperConfig.CreateMapper();
+builder.Services.AddSingleton(mapper);
 
 var app = builder.Build();
 
@@ -71,6 +84,117 @@ app.MapDelete("/todos/{id}", async (SocialKpiDbContext db, int id) =>
     }
 
     db.Todos.Remove(todo);
+    await db.SaveChangesAsync();
+
+    return Results.Ok();
+});
+
+// Event endpoints.
+app.MapGet("/event", async (SocialKpiDbContext db) =>
+{
+    return await db.Events.ToListAsync();
+});
+
+app.MapGet("/event/{id}", async (SocialKpiDbContext db, int id) =>
+{
+    return await db.Events.FindAsync(id) switch
+    {
+        Event foundEvent => Results.Ok(foundEvent),
+        null => Results.NotFound()
+    };
+});
+
+app.MapPost("/event", async (IMapper mapper, SocialKpiDbContext db, EventInput inputEvent) =>
+{
+    var dbEntity = mapper.Map<EventInput, Event>(inputEvent);
+
+    await db.Events.AddAsync(dbEntity);
+    await db.SaveChangesAsync();
+
+    return Results.Created($"/event/{dbEntity.Id}", dbEntity);
+});
+
+app.MapPut("/event/{id}", async (IMapper mapper, SocialKpiDbContext db, int id, EventInput inputEvent) =>
+{
+    var dbEntity = mapper.Map<EventInput, Event>(inputEvent);
+
+    if (!await db.Events.AnyAsync(x => x.Id == id))
+    {
+        return Results.NotFound();
+    }
+
+    db.Update(dbEntity);
+    await db.SaveChangesAsync();
+
+    return Results.Ok();
+});
+
+
+app.MapDelete("/event/{id}", async (SocialKpiDbContext db, int id) =>
+{
+    var eventToDelete = await db.Events.FindAsync(id);
+    if (eventToDelete is null)
+    {
+        return Results.NotFound();
+    }
+
+    db.Events.Remove(eventToDelete);
+    await db.SaveChangesAsync();
+
+    return Results.Ok();
+});
+
+// Employee.
+app.MapGet("/employee", async (SocialKpiDbContext db) =>
+{
+    return await db.Employees.ToListAsync();
+});
+
+
+app.MapGet("/employee/{id}", async (SocialKpiDbContext db, int id) =>
+{
+    return await db.Employees.FindAsync(id) switch
+    {
+        Employee foundEmployee => Results.Ok(foundEmployee),
+        null => Results.NotFound()
+    };
+});
+
+app.MapPost("/employee", async (IMapper mapper, SocialKpiDbContext db, EmployeeInput inputEmployee) =>
+{
+    var dbEntity = mapper.Map<EmployeeInput, Employee>(inputEmployee);
+
+    await db.Employees.AddAsync(dbEntity);
+    await db.SaveChangesAsync();
+
+    return Results.Created($"/employee/{dbEntity.Id}", dbEntity);
+});
+
+app.MapPut("/employee/{id}", async (IMapper mapper, SocialKpiDbContext db, int id, EmployeeInput inputEmployee) =>
+{
+    var dbEntity = mapper.Map<EmployeeInput, Employee>(inputEmployee);
+
+    if (!await db.Employees.AnyAsync(x => x.Id == id))
+    {
+        return Results.NotFound();
+    }
+
+    db.Update(dbEntity);
+    await db.SaveChangesAsync();
+
+    return Results.Ok();
+});
+
+
+app.MapDelete("/employee/{id}", async (SocialKpiDbContext db, int id) =>
+{
+    var employeeToDelete = await db.Employees.FindAsync(id);
+    if (employeeToDelete is null)
+    {
+        return Results.NotFound();
+    }
+
+    db.Employees.Remove(employeeToDelete);
     await db.SaveChangesAsync();
 
     return Results.Ok();

@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TodoApi\SocialKpiApi.csproj" />
+    <ProjectReference Include="..\SocialKpiApi\SocialKpiApi.csproj" />
   </ItemGroup>
 
 </Project>

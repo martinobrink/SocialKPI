@@ -9,6 +9,11 @@ public class SocialKpiDbContext : DbContext
     public DbSet<Todo> Todos => Set<Todo>();
     public DbSet<Event> Events => Set<Event>();
     public DbSet<Employee> Employees => Set<Employee>();
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+    }
 }
 
 public class Todo

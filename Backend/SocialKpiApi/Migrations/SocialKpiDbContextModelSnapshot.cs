@@ -6,10 +6,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Sample.Migrations
+namespace SocialKpiApi.Migrations
 {
     [DbContext(typeof(SocialKpiDbContext))]
-    partial class TodoDbContextModelSnapshot : ModelSnapshot
+    partial class SocialKpiDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {

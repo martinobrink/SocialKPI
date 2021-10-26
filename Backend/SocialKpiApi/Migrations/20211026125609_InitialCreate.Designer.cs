@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Sample.Migrations
+namespace SocialKpiApi.Migrations
 {
     [DbContext(typeof(SocialKpiDbContext))]
-    [Migration("20211026102957_Added_Employee_And_Event")]
-    partial class Added_Employee_And_Event
+    [Migration("20211026125609_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
