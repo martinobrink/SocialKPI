@@ -5,7 +5,7 @@ using SocialKpiApi.Infrastructure.AutoMapper;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = builder.Configuration.GetConnectionString("Todos") ?? "Data Source=Todos.db";
+var connectionString = builder.Configuration.GetConnectionString("dbConnectionString") ?? "Data Source=Todos.db";
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSqlite<SocialKpiDbContext>(connectionString);
