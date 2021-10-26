@@ -15,7 +15,13 @@ if (Debugger.IsAttached)
 } 
 else
 {
-    connectionString = builder.Configuration.GetConnectionString("dbConnectionString") ?? "Data Source=Todos.db";
+    connectionString = builder.Configuration.GetConnectionString("dbConnectionString");
+
+    builder.Services.AddEntityFrameworkNpgsql();
+    builder.Services.AddDbContext<SocialKpiDbContext>(options =>
+    {
+        options.UseNpgsql(connectionString);
+    });
 }
 
 builder.Services.AddEndpointsApiExplorer();
