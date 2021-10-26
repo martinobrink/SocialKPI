@@ -2,13 +2,23 @@ using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using SocialKpiApi.Models;
 using SocialKpiApi.Infrastructure.AutoMapper;
+using System.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = builder.Configuration.GetConnectionString("SocialKpi") ?? "Data Source=socialKpi.db";
+var connectionString = "";
+
+if (Debugger.IsAttached)
+{
+    connectionString = builder.Configuration.GetConnectionString("SocialKpi") ?? "Data Source=socialKpi.db";
+    builder.Services.AddSqlite<SocialKpiDbContext>(connectionString);
+} 
+else
+{
+    connectionString = builder.Configuration.GetConnectionString("dbConnectionString") ?? "Data Source=Todos.db";
+}
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSqlite<SocialKpiDbContext>(connectionString);
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new() { Title = builder.Environment.ApplicationName, Version = "v1" });
