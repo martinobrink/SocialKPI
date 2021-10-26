@@ -288,6 +288,8 @@ __pycache__/
 
 # SQL Lite
 *.db
+*.db-shm
+*.db-wal
 
 # Visual Studio code
 .vscode/*
@@ -295,5 +297,5 @@ __pycache__/
 
 # MacOS
 .DS_Store
-Backend/SocialKpiApi/Todos.db-shm
-Backend/SocialKpiApi/Todos.db-wal
+*.db-shm
+*.db-wal
