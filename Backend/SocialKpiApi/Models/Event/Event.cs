@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using SocialKpiApi.Models;
 
 namespace SocialKpiApi.Models
 {

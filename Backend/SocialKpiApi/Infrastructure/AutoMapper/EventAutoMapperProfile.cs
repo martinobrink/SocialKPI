@@ -8,6 +8,7 @@ namespace SocialKpiApi.Infrastructure.AutoMapper
         public EventAutoMapperProfile() : base(nameof(EventAutoMapperProfile)) 
         {
             CreateMap<EventInput, Event>();
+            CreateMap<Event, EventOutput>();
         }
     }
 }

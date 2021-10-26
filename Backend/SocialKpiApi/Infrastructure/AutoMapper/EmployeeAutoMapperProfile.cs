@@ -8,6 +8,7 @@ namespace SocialKpiApi.Infrastructure.AutoMapper
         public EmployeeAutoMapperProfile() : base(nameof(EmployeeAutoMapperProfile))
         {
             CreateMap<EmployeeInput, Employee>();
+            CreateMap<Employee, EmployeeOutput>();
         }
     }
 }

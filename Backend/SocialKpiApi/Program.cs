@@ -108,10 +108,24 @@ app.MapPost("/event", async (IMapper mapper, SocialKpiDbContext db, EventInput i
 {
     var dbEntity = mapper.Map<EventInput, Event>(inputEvent);
 
+    if (inputEvent.Participants != null && dbEntity.Participants != null)
+    {
+        foreach (var participant in inputEvent.Participants)
+        {
+            var existingEmployee = await db.Employees.FirstOrDefaultAsync(e => e.Initials == participant.Initials);
+            if (existingEmployee != null)
+            {
+                dbEntity.Participants[dbEntity.Participants.FindIndex(p => p.Initials == existingEmployee.Initials)] = existingEmployee;
+            }
+        }
+    }
+
     await db.Events.AddAsync(dbEntity);
     await db.SaveChangesAsync();
 
-    return Results.Created($"/event/{dbEntity.Id}", dbEntity);
+    var outputEvent = mapper.Map<Event, EventOutput>(dbEntity);
+
+    return Results.Created($"/event/{dbEntity.Id}", outputEvent);
 });
 
 app.MapPut("/event/{id}", async (IMapper mapper, SocialKpiDbContext db, int id, EventInput inputEvent) =>
@@ -144,7 +158,7 @@ app.MapDelete("/event/{id}", async (SocialKpiDbContext db, int id) =>
     return Results.Ok();
 });
 
-// Employee.
+// Employee endpoints.
 app.MapGet("/employee", async (SocialKpiDbContext db) =>
 {
     return await db.Employees.ToListAsync();
@@ -184,7 +198,6 @@ app.MapPut("/employee/{id}", async (IMapper mapper, SocialKpiDbContext db, int i
 
     return Results.Ok();
 });
-
 
 app.MapDelete("/employee/{id}", async (SocialKpiDbContext db, int id) =>
 {

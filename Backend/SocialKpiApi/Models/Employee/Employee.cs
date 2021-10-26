@@ -11,5 +11,6 @@ namespace SocialKpiApi.Models
         public string LastName { get; set; }
         [Required]
         public string Initials { get; set; }
+        public List<Event> Events {  get; set; }
     }
 }
