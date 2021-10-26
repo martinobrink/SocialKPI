@@ -295,3 +295,5 @@ __pycache__/
 
 # MacOS
 .DS_Store
+Backend/SocialKpiApi/Todos.db-shm
+Backend/SocialKpiApi/Todos.db-wal
