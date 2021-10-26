@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
-public class TodoDbContext : DbContext
+public class SocialKpiDbContext : DbContext
 {
-    public TodoDbContext(DbContextOptions options) : base(options) { }
+    public SocialKpiDbContext(DbContextOptions options) : base(options) { }
 
     public DbSet<Todo> Todos => Set<Todo>();
 }

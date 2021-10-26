@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Sample.Migrations
 {
-    [DbContext(typeof(TodoDbContext))]
+    [DbContext(typeof(SocialKpiDbContext))]
     partial class TodoDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

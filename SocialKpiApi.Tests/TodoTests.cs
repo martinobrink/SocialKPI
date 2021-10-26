@@ -77,9 +77,9 @@ namespace Sample.Tests
 
             builder.ConfigureServices(services =>
             {
-                services.RemoveAll(typeof(DbContextOptions<TodoDbContext>));
+                services.RemoveAll(typeof(DbContextOptions<SocialKpiDbContext>));
 
-                services.AddDbContext<TodoDbContext>(options =>
+                services.AddDbContext<SocialKpiDbContext>(options =>
                     options.UseInMemoryDatabase("Testing", root));
             });
 

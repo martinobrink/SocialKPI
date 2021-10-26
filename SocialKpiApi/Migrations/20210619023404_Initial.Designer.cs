@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Sample.Migrations
 {
-    [DbContext(typeof(TodoDbContext))]
+    [DbContext(typeof(SocialKpiDbContext))]
     [Migration("20210619023404_Initial")]
     partial class Initial
     {

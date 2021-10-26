@@ -5,7 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("Todos") ?? "Data Source=Todos.db";
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSqlite<TodoDbContext>(connectionString);
+builder.Services.AddSqlite<SocialKpiDbContext>(connectionString);
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new() { Title = builder.Environment.ApplicationName, Version = "v1" });
@@ -21,12 +21,12 @@ if (app.Environment.IsDevelopment())
 
 app.MapFallback(() => Results.Redirect("/swagger"));
 
-app.MapGet("/todos", async (TodoDbContext db) =>
+app.MapGet("/todos", async (SocialKpiDbContext db) =>
 {
     return await db.Todos.ToListAsync();
 });
 
-app.MapGet("/todos/{id}", async (TodoDbContext db, int id) =>
+app.MapGet("/todos/{id}", async (SocialKpiDbContext db, int id) =>
 {
     return await db.Todos.FindAsync(id) switch
     {
@@ -35,7 +35,7 @@ app.MapGet("/todos/{id}", async (TodoDbContext db, int id) =>
     };
 });
 
-app.MapPost("/todos", async (TodoDbContext db, Todo todo) =>
+app.MapPost("/todos", async (SocialKpiDbContext db, Todo todo) =>
 {
     await db.Todos.AddAsync(todo);
     await db.SaveChangesAsync();
@@ -43,7 +43,7 @@ app.MapPost("/todos", async (TodoDbContext db, Todo todo) =>
     return Results.Created($"/todo/{todo.Id}", todo);
 });
 
-app.MapPut("/todos/{id}", async (TodoDbContext db, int id, Todo todo) =>
+app.MapPut("/todos/{id}", async (SocialKpiDbContext db, int id, Todo todo) =>
 {
     if (id != todo.Id)
     {
@@ -62,7 +62,7 @@ app.MapPut("/todos/{id}", async (TodoDbContext db, int id, Todo todo) =>
 });
 
 
-app.MapDelete("/todos/{id}", async (TodoDbContext db, int id) =>
+app.MapDelete("/todos/{id}", async (SocialKpiDbContext db, int id) =>
 {
     var todo = await db.Todos.FindAsync(id);
     if (todo is null)

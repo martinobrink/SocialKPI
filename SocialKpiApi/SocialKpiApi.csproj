@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <InternalsVisibleTo Include="TodoApi.Tests" />
+    <InternalsVisibleTo Include="SocialKpiApi.Tests" />
   </ItemGroup>
 
 </Project>
