@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/list_item_height"
+    android:layout_marginLeft="@dimen/margin_0"
+    android:layout_marginRight="@dimen/margin_0">
+
+    <TextView
+        android:id="@+id/employee_initials_text_view"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:background="@drawable/bg_circle"
+        android:gravity="center"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="JHE" />
+
+    <TextView
+        android:id="@+id/employee_name_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_0"
+        app:layout_constraintStart_toEndOf="@+id/employee_initials_text_view"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Jørgen Christian Heinsen" />
+
+    <TextView
+        android:id="@+id/employee_department"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_0"
+        app:layout_constraintStart_toEndOf="@+id/employee_initials_text_view"
+        app:layout_constraintTop_toBottomOf="@+id/employee_name_text_view"
+        tools:text="Dokk1" />
+
+    <TextView
+        android:id="@+id/employee_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_0"
+        app:layout_constraintStart_toEndOf="@+id/employee_initials_text_view"
+        app:layout_constraintTop_toBottomOf="@+id/employee_department"
+        tools:text="jhe@trifork.com" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
