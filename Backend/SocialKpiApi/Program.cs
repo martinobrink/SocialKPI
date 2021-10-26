@@ -5,7 +5,7 @@ using SocialKpiApi.Infrastructure.AutoMapper;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = builder.Configuration.GetConnectionString("Todos") ?? "Data Source=Todos.db";
+var connectionString = builder.Configuration.GetConnectionString("SocialKpi") ?? "Data Source=socialKpi.db";
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSqlite<SocialKpiDbContext>(connectionString);
@@ -30,74 +30,49 @@ app.UseSwagger();
 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", $"{builder.Environment.ApplicationName} v1"));
 app.MapFallback(() => Results.Redirect("/swagger"));
 
-app.MapGet("/todos", async (SocialKpiDbContext db) =>
-{
-    return await db.Todos.ToListAsync();
-});
-
-app.MapGet("/todos/{id}", async (SocialKpiDbContext db, int id) =>
-{
-    return await db.Todos.FindAsync(id) switch
-    {
-        Todo todo => Results.Ok(todo),
-        null => Results.NotFound()
-    };
-});
-
-app.MapPost("/todos", async (SocialKpiDbContext db, Todo todo) =>
-{
-    await db.Todos.AddAsync(todo);
-    await db.SaveChangesAsync();
-
-    return Results.Created($"/todo/{todo.Id}", todo);
-});
-
-app.MapPut("/todos/{id}", async (SocialKpiDbContext db, int id, Todo todo) =>
-{
-    if (id != todo.Id)
-    {
-        return Results.BadRequest();
-    }
-
-    if (!await db.Todos.AnyAsync(x => x.Id == id))
-    {
-        return Results.NotFound();
-    }
-
-    db.Update(todo);
-    await db.SaveChangesAsync();
-
-    return Results.Ok();
-});
-
-
-app.MapDelete("/todos/{id}", async (SocialKpiDbContext db, int id) =>
-{
-    var todo = await db.Todos.FindAsync(id);
-    if (todo is null)
-    {
-        return Results.NotFound();
-    }
-
-    db.Todos.Remove(todo);
-    await db.SaveChangesAsync();
-
-    return Results.Ok();
-});
-
 // Event endpoints.
 app.MapGet("/event", async (SocialKpiDbContext db) =>
 {
-    return await db.Events.ToListAsync();
+    var events = await db.Events.ToListAsync();
+    var eventsOutput = mapper.Map<List<Event>, List< EventOutput>> (events);
+
+    // Get participants.
+    var currentEventCount = 0;
+    foreach (var ev in events)
+    {
+        var registrations = await db.EventRegistrations.Where(er => er.EventId == ev.Id).ToListAsync();
+        foreach (var registration in registrations)
+        {
+            var employee = await db.Employees.FirstOrDefaultAsync(emp => emp.Id == registration.EmployeeId);
+            eventsOutput[currentEventCount].Participants?.Add(mapper.Map<Employee, EmployeeOutput>(employee));
+        }
+
+        currentEventCount++;
+    }
+    
+    return Results.Ok(eventsOutput);
 });
 
 app.MapGet("/event/{id}", async (SocialKpiDbContext db, int id) =>
 {
-    return await db.Events.FindAsync(id) switch
+    var existingEvent = await db.Events.FindAsync(id);
+
+    if (existingEvent == null)
     {
-        Event foundEvent => Results.Ok(foundEvent),
-        null => Results.NotFound()
-    };
+        return Results.NotFound();
+    }
+
+    var eventOutput = mapper.Map<Event, EventOutput>(existingEvent);
+
+    // Get event registrations.
+    var registrations = await db.EventRegistrations.Where(er => er.EventId == existingEvent.Id).ToListAsync();
+    foreach (var registration in registrations)
+    {
+        var employee = await db.Employees.FirstOrDefaultAsync(emp => emp.Id == registration.EmployeeId);
+        eventOutput.Participants?.Add(mapper.Map<Employee, EmployeeOutput>(employee));
+    }
+
+    return Results.Ok(eventOutput);
 });
 
 app.MapPost("/event", async (IMapper mapper, SocialKpiDbContext db, EventInput inputEvent) =>
@@ -108,9 +83,11 @@ app.MapPost("/event", async (IMapper mapper, SocialKpiDbContext db, EventInput i
     {
         foreach (var participant in inputEvent.Participants)
         {
+            // Get an existing employee for the given initials.
             var existingEmployee = await db.Employees.FirstOrDefaultAsync(e => e.Initials == participant.Initials);
             if (existingEmployee != null)
             {
+                // Add the existing employee to the Event entity.
                 dbEntity.Participants[dbEntity.Participants.FindIndex(p => p.Initials == existingEmployee.Initials)] = existingEmployee;
             }
         }
@@ -126,19 +103,20 @@ app.MapPost("/event", async (IMapper mapper, SocialKpiDbContext db, EventInput i
 
 app.MapPut("/event/{id}", async (IMapper mapper, SocialKpiDbContext db, int id, EventInput inputEvent) =>
 {
-    var dbEntity = mapper.Map<EventInput, Event>(inputEvent);
-
     if (!await db.Events.AnyAsync(x => x.Id == id))
     {
         return Results.NotFound();
     }
 
-    db.Update(dbEntity);
-    await db.SaveChangesAsync();
+    // Get current event from DB and map the input to it.
+    var eventToUpdate = await db.Events.FirstOrDefaultAsync(x => x.Id == id);
+    mapper.Map(inputEvent, eventToUpdate);
+
+    db.Update(eventToUpdate);
+    await db.SaveChangesAsync();    
 
     return Results.Ok();
 });
-
 
 app.MapDelete("/event/{id}", async (SocialKpiDbContext db, int id) =>
 {
@@ -157,15 +135,14 @@ app.MapDelete("/event/{id}", async (SocialKpiDbContext db, int id) =>
 // Employee endpoints.
 app.MapGet("/employee", async (SocialKpiDbContext db) =>
 {
-    return await db.Employees.ToListAsync();
+    return mapper.Map<List<Employee>, List<EmployeeOutput>>(await db.Employees.ToListAsync());
 });
-
 
 app.MapGet("/employee/{id}", async (SocialKpiDbContext db, int id) =>
 {
     return await db.Employees.FindAsync(id) switch
     {
-        Employee foundEmployee => Results.Ok(foundEmployee),
+        Employee foundEmployee => Results.Ok(mapper.Map<Employee, EmployeeOutput>(foundEmployee)),
         null => Results.NotFound()
     };
 });
@@ -182,14 +159,15 @@ app.MapPost("/employee", async (IMapper mapper, SocialKpiDbContext db, EmployeeI
 
 app.MapPut("/employee/{id}", async (IMapper mapper, SocialKpiDbContext db, int id, EmployeeInput inputEmployee) =>
 {
-    var dbEntity = mapper.Map<EmployeeInput, Employee>(inputEmployee);
-
     if (!await db.Employees.AnyAsync(x => x.Id == id))
     {
         return Results.NotFound();
     }
 
-    db.Update(dbEntity);
+    var employeeToUpdate = await db.Employees.FirstOrDefaultAsync(x => x.Id == id);
+    mapper.Map(inputEmployee, employeeToUpdate);
+
+    db.Update(employeeToUpdate);
     await db.SaveChangesAsync();
 
     return Results.Ok();
