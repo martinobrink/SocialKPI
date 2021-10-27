@@ -42,6 +42,9 @@ builder.Services.AddSingleton(mapper);
 
 var app = builder.Build();
 
+//Ensure EF Core Code First Migrations are run
+UpdateDatabase(app);
+
 app.UseSwagger();
 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", $"{builder.Environment.ApplicationName} v1"));
 app.MapFallback(() => Results.Redirect("/swagger"));
@@ -204,3 +207,20 @@ app.MapDelete("/employee/{id}", async (SocialKpiDbContext db, int id) =>
 });
 
 app.Run();
+
+
+static void UpdateDatabase(IApplicationBuilder app)
+    {
+        try
+        {
+            using var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope();
+            serviceScope?.ServiceProvider.GetService<SocialKpiDbContext>()?.Database.Migrate();
+        }
+        catch (Exception)
+        {
+            if (Debugger.IsAttached)
+            {
+                Debugger.Break();
+            }
+        }
+    }
