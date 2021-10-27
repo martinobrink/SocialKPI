@@ -14,10 +14,11 @@ class EmployeeRepository @Inject constructor(
     suspend fun getEmployees(): List<Employee> {
         return try {
             webservice.getEmployees()
-        }
-        catch (e: HttpException) {
+        } catch (e: HttpException) {
             Log.d(TAG, e.toString())
-            return listOf()
+            listOf(
+                Employee( "Jørgen", "Heinsen", "jhe")
+            )
         }
     }
 

@@ -4,13 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/list_item_height"
-    android:layout_marginLeft="@dimen/margin_0"
-    android:layout_marginRight="@dimen/margin_0">
-
+    android:layout_margin="@dimen/margin_0">
     <TextView
         android:id="@+id/employee_initials_text_view"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:background="@drawable/bg_circle"
         android:gravity="center"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
