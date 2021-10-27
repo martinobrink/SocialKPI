@@ -1,0 +1,18 @@
+version: "3.4"
+
+services:
+  socialkpi.api:
+    image: ${DOCKER_REGISTRY}socialkpi.api:dev
+    container_name: SocialKpiApi
+    build:
+      target: debug
+    environment:
+      - DOTNET_USE_POLLING_FILE_WATCHER=1
+      - ASPNETCORE_LOGGING__CONSOLE__DISABLECOLORS=true
+      - NUGET_FALLBACK_PACKAGES=/root/.nuget/fallbackpackages
+    volumes:
+      - ${HOME}/.nuget/packages\:/root/.nuget/packages:ro
+      - ~/.aspnet/https:/root/.aspnet/https:ro
+      - ~/.microsoft/usersecrets:/root/.microsoft/usersecrets:ro
+    entrypoint: tail -f /dev/null
+    tty: true

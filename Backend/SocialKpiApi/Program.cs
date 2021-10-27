@@ -7,27 +7,12 @@ using System.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<SocialKpiDbContext>(options =>
-    {
-        options.UseInMemoryDatabase(databaseName: "SocialKpi");
-    });
-
 /*
-var connectionString = "";
-if (Debugger.IsAttached)
+builder.Services.AddDbContext<SocialKpiDbContext>(options =>
 {
-    connectionString = builder.Configuration.GetConnectionString("SocialKpi") ?? "Data Source=socialKpi.db";
-    builder.Services.AddSqlite<SocialKpiDbContext>(connectionString);
-} 
-else
-{
-    connectionString = builder.Configuration.GetConnectionString("dbConnectionString");
-    builder.Services.AddEntityFrameworkNpgsql();
-    builder.Services.AddDbContext<SocialKpiDbContext>(options =>
-    {
-        options.UseNpgsql(connectionString);
-    });
-}*/
+    options.UseInMemoryDatabase(databaseName: "SocialKpi");
+});*/
+
 var connectionString = builder.Configuration.GetConnectionString("dbConnectionString");
 
 builder.Services.AddEntityFrameworkNpgsql();
