@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.InMemory;
 using AutoMapper;
 using SocialKpiApi.Models;
 using SocialKpiApi.Infrastructure.AutoMapper;
@@ -6,8 +7,13 @@ using System.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = "";
+builder.Services.AddDbContext<SocialKpiDbContext>(options =>
+    {
+        options.UseInMemoryDatabase(databaseName: "SocialKpi");
+    });
 
+/*
+var connectionString = "";
 if (Debugger.IsAttached)
 {
     connectionString = builder.Configuration.GetConnectionString("SocialKpi") ?? "Data Source=socialKpi.db";
@@ -16,13 +22,13 @@ if (Debugger.IsAttached)
 else
 {
     connectionString = builder.Configuration.GetConnectionString("dbConnectionString");
-
     builder.Services.AddEntityFrameworkNpgsql();
     builder.Services.AddDbContext<SocialKpiDbContext>(options =>
     {
         options.UseNpgsql(connectionString);
     });
 }
+*/
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -43,7 +49,7 @@ builder.Services.AddSingleton(mapper);
 var app = builder.Build();
 
 //Ensure EF Core Code First Migrations are run
-UpdateDatabase(app);
+//UpdateDatabase(app);
 
 app.UseSwagger();
 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", $"{builder.Environment.ApplicationName} v1"));
@@ -208,7 +214,7 @@ app.MapDelete("/employee/{id}", async (SocialKpiDbContext db, int id) =>
 
 app.Run();
 
-
+/*
 static void UpdateDatabase(IApplicationBuilder app)
     {
         try
@@ -224,3 +230,4 @@ static void UpdateDatabase(IApplicationBuilder app)
             }
         }
     }
+    */
