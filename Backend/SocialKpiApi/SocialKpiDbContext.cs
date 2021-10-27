@@ -21,7 +21,18 @@ public class SocialKpiDbContext : DbContext
                 x => x.HasOne(x => x.Employee)
                       .WithMany().HasForeignKey(x => x.EmployeeId),
                 x => x.HasOne(x => x.Event)
-                      .WithMany().HasForeignKey(x => x.EventId)
-            );
+                      .WithMany().HasForeignKey(x => x.EventId));
+
+        modelBuilder.Entity<Event>()
+            .Property(e => e.Id)
+            .ValueGeneratedOnAdd();
+
+        modelBuilder.Entity<Employee>()
+            .Property(e => e.Id)
+            .ValueGeneratedOnAdd();
+
+        modelBuilder.Entity<Employee>()
+            .HasIndex(e => e.Initials)
+            .IsUnique();
     }
 }

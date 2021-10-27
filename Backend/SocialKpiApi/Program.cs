@@ -8,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = "";
 
+/*
 if (Debugger.IsAttached)
 {
     connectionString = builder.Configuration.GetConnectionString("SocialKpi") ?? "Data Source=socialKpi.db";
@@ -22,7 +23,14 @@ else
     {
         options.UseNpgsql(connectionString);
     });
-}
+}*/
+connectionString = builder.Configuration.GetConnectionString("dbConnectionString");
+
+builder.Services.AddEntityFrameworkNpgsql();
+builder.Services.AddDbContext<SocialKpiDbContext>(options =>
+{
+    options.UseNpgsql(connectionString);
+});
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -45,6 +53,8 @@ var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", $"{builder.Environment.ApplicationName} v1"));
 app.MapFallback(() => Results.Redirect("/swagger"));
+
+UpdateDatabase(app);
 
 // Event endpoints.
 app.MapGet("/event", async (SocialKpiDbContext db) =>
@@ -204,3 +214,20 @@ app.MapDelete("/employee/{id}", async (SocialKpiDbContext db, int id) =>
 });
 
 app.Run();
+
+
+static void UpdateDatabase(IApplicationBuilder app)
+{
+    try
+    {
+        using var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope();
+        serviceScope?.ServiceProvider.GetService<SocialKpiDbContext>()?.Database.Migrate();
+    }
+    catch (Exception)
+    {
+        if (Debugger.IsAttached)
+        {
+            Debugger.Break();
+        }
+    }
+}

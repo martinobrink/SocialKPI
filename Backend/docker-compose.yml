@@ -1,0 +1,23 @@
+version: '3.4'
+
+services:
+  socialkpi.api:
+    image: ${DOCKER_REGISTRY}socialkpi.api
+    build:
+      context: .
+      dockerfile: SocialKpiApi/Dockerfile
+    depends_on:
+      - socialkpi.db
+
+  socialkpi.db:
+    image: postgres:13.4
+    ports:
+      - "5452:5432"
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    volumes:
+      - data-postgresql-socialkpi.db:/var/lib/postgresql/data
+
+volumes: 
+  data-postgresql-socialkpi.db:
+    external: true
