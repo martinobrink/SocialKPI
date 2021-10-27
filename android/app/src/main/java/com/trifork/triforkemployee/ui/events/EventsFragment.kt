@@ -1,4 +1,4 @@
-package com.example.triforkemployee.ui.events
+package com.trifork.triforkemployee.ui.events
 
 import android.os.Bundle
 import android.view.LayoutInflater

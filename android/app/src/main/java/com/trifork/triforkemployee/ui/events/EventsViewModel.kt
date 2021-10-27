@@ -1,4 +1,4 @@
-package com.example.triforkemployee.ui.events
+package com.trifork.triforkemployee.ui.events
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
