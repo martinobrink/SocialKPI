@@ -7,20 +7,21 @@ using System.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
 
-/*
-builder.Services.AddDbContext<SocialKpiDbContext>(options =>
-{
-    options.UseInMemoryDatabase(databaseName: "SocialKpi");
-});*/
-
 var connectionString = builder.Configuration.GetConnectionString("dbConnectionString");
-
-builder.Services.AddEntityFrameworkNpgsql();
-builder.Services.AddDbContext<SocialKpiDbContext>(options =>
+bool usePostgresql = !String.IsNullOrEmpty(connectionString);
+if (usePostgresql)
 {
-    options.UseNpgsql(connectionString);
-});
-
+    builder.Services.AddEntityFrameworkNpgsql();
+    builder.Services.AddNpgsql<SocialKpiDbContext>(connectionString);
+} 
+else
+{
+    //In-memory DB as fallback (for local development)
+    builder.Services.AddDbContext<SocialKpiDbContext>(options =>
+    {
+        options.UseInMemoryDatabase(databaseName: "SocialKpi");
+    });
+}
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -34,7 +35,6 @@ var mapperConfig = new MapperConfiguration(mc =>
     mc.AddProfile(new EventAutoMapperProfile());
     mc.AddProfile(new EmployeeAutoMapperProfile());
 });
-
 IMapper mapper = mapperConfig.CreateMapper();
 builder.Services.AddSingleton(mapper);
 
@@ -44,8 +44,11 @@ app.UseSwagger();
 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", $"{builder.Environment.ApplicationName} v1"));
 app.MapFallback(() => Results.Redirect("/swagger"));
 
-//Ensure EF Core Code First Migrations are run
-UpdateDatabase(app);
+if (usePostgresql) 
+{   
+    //Ensure EF Core Code First Migrations are run
+    UpdateDatabase(app);
+}
 
 // Event endpoints.
 app.MapGet("/event", async (SocialKpiDbContext db) =>
@@ -70,7 +73,7 @@ app.MapGet("/event", async (SocialKpiDbContext db) =>
     return Results.Ok(eventsOutput);
 });
 
-app.MapGet("/event/{id}", async (SocialKpiDbContext db, int id) =>
+app.MapGet("/event/{id}", async (SocialKpiDbContext db, int id) => 
 {
     var existingEvent = await db.Events.FindAsync(id);
 
