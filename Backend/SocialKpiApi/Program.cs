@@ -207,6 +207,16 @@ app.MapDelete("/employee/{id}", async (SocialKpiDbContext db, int id) =>
     return Results.Ok();
 });
 
+app.MapGet("/info", async (SocialKpiDbContext db) =>
+{    
+    var connectionString = app.Configuration.GetConnectionString("dbConnectionString");
+    if (String.IsNullOrEmpty(connectionString))
+    {
+        connectionString = "ConnectionString was empty";
+    }
+    return Results.Ok(connectionString.Substring(0, Math.Min(connectionString.Length - 1, 30)));
+});
+
 app.Run();
 
 static void UpdateDatabase(IApplicationBuilder app)
