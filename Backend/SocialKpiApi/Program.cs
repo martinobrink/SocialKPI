@@ -5,9 +5,10 @@ using SocialKpiApi.Models;
 using SocialKpiApi.Infrastructure.AutoMapper;
 using System.Diagnostics;
 
-var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(args);//TODO: attempt to use CreateBuilder with Azure environment support
 
-var connectionString = builder.Configuration.GetConnectionString("dbConnectionString");
+//HACK: Using GetValue() with Azure prefix instead of using builder.Configuration.GetConnectionString("dbConnectionString");
+var connectionString = builder.Configuration.GetValue<string>("POSTGRESQLCONNSTR_dbConnectionString");
 bool usePostgresql = !String.IsNullOrEmpty(connectionString);
 if (usePostgresql)
 {
@@ -209,12 +210,12 @@ app.MapDelete("/employee/{id}", async (SocialKpiDbContext db, int id) =>
 
 app.MapGet("/info", async (SocialKpiDbContext db) =>
 {    
-    var connectionString = app.Configuration.GetConnectionString("dbConnectionString");
+    var connectionString = app.Configuration.GetValue<string>("POSTGRESQLCONNSTR_dbConnectionString");
     if (String.IsNullOrEmpty(connectionString))
     {
         connectionString = "ConnectionString was empty";
     }
-    return Results.Ok(connectionString.Substring(0, Math.Min(connectionString.Length - 1, 30)));
+    return Results.Ok(connectionString.Substring(0, Math.Min(connectionString.Length, 30)));
 });
 
 app.Run();
