@@ -1,7 +1,7 @@
 package com.trifork.triforkemployee.repo.employee
 
 import android.util.Log
-import com.trifork.triforkemployee.database.employee.Employee
+import com.trifork.triforkemployee.database.Employee
 import com.trifork.triforkemployee.repo.Webservice
 import retrofit2.HttpException
 import javax.inject.Inject

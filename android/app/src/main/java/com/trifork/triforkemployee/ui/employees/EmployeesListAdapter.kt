@@ -8,15 +8,15 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.triforkemployee.R
-import com.trifork.triforkemployee.database.employee.Employee
+import com.trifork.triforkemployee.database.Employee
 
 class EmployeesListAdapter(private val onClick: (Employee) -> Unit) : ListAdapter<Employee, EmployeesListAdapter.ViewHolder>(EmployeeDiffCallback) {
 
     class ViewHolder(view: View, val onClick: (Employee) -> Unit) : RecyclerView.ViewHolder(view) {
-        private val initialsTextView: TextView = view.findViewById(R.id.employee_initials_text_view)
-        private val nameTextView: TextView = view.findViewById(R.id.employee_name_text_view)
-        private val departmentTextView: TextView = view.findViewById(R.id.employee_department)
-        private val emailTextView: TextView = view.findViewById(R.id.employee_email)
+        private val initialsTextView: TextView = view.findViewById(R.id.text_view_category_letters)
+        private val nameTextView: TextView = view.findViewById(R.id.text_view_event_title)
+        private val departmentTextView: TextView = view.findViewById(R.id.text_view_category)
+        private val emailTextView: TextView = view.findViewById(R.id.text_view_time_of_event)
         private var currentEmployee: Employee? = null
 
         init {

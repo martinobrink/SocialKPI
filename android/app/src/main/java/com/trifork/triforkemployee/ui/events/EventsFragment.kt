@@ -4,37 +4,47 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import androidx.fragment.app.viewModels
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.triforkemployee.databinding.FragmentEventsBinding
+import com.trifork.triforkemployee.database.Event
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class EventsFragment : Fragment() {
 
-    private lateinit var eventsViewModel: EventsViewModel
+    private val eventsViewModel: EventsViewModel by viewModels()
     private var _binding: FragmentEventsBinding? = null
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
-    ): View? {
-        eventsViewModel =
-                ViewModelProvider(this).get(EventsViewModel::class.java)
-
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         _binding = FragmentEventsBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textHome
-        eventsViewModel.text.observe(viewLifecycleOwner, Observer {
-            textView.text = it
+        val listView = binding.listViewEvents
+        val adapter = EventsListAdapter(listOf()) { event -> adapterOnClick(event) }
+
+        listView.adapter = adapter
+        listView.layoutManager = LinearLayoutManager(context)
+
+        eventsViewModel.events.observe(viewLifecycleOwner, {
+            adapter.events = it
+            adapter.notifyDataSetChanged()
         })
+
+
         return root
+    }
+
+    private fun adapterOnClick(event: Event) {
+        //val action = EmployeesFragmentDirections.actionNavEmployeesToNavEmployee(event.id)
+        //findNavController().navigate(action)
     }
 
     override fun onDestroyView() {

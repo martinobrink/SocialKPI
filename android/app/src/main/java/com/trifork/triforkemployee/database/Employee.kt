@@ -1,4 +1,4 @@
-package com.trifork.triforkemployee.database.employee
+package com.trifork.triforkemployee.database
 
 data class Employee(
     val id: String,

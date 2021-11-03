@@ -28,7 +28,7 @@
         android:textAppearance="?attr/textAppearanceListItem"
         app:layout_constraintStart_toEndOf="@+id/text_view_category_letters"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Jørgen Christian Heinsen" />
+        tools:text="Ugentlig løbetur" />
 
     <TextView
         android:id="@+id/text_view_category"
@@ -39,7 +39,7 @@
         android:textAppearance="?attr/textAppearanceListItemSecondary"
         app:layout_constraintStart_toEndOf="@+id/text_view_category_letters"
         app:layout_constraintTop_toBottomOf="@+id/text_view_event_title"
-        tools:text="Dokk1" />
+        tools:text="Running" />
 
     <TextView
         android:id="@+id/text_view_time_of_event"
@@ -50,6 +50,6 @@
         android:textAppearance="?attr/textAppearanceListItemSecondary"
         app:layout_constraintStart_toEndOf="@+id/text_view_category_letters"
         app:layout_constraintTop_toBottomOf="@+id/text_view_category"
-        tools:text="jhe@trifork.com" />
+        tools:text="11.08.21" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

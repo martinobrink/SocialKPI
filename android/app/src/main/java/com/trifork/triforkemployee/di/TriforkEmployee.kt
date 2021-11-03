@@ -6,7 +6,4 @@ import dagger.hilt.android.HiltAndroidApp
 @HiltAndroidApp
 class TriforkEmployee : Application() {
 
-
-
-
 }
