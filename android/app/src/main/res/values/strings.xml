@@ -9,5 +9,6 @@
 
     <string name="menu_events">Events</string>
     <string name="menu_employees">Ansatte</string>
+    <string name="menu_employee">Kollega</string>
 
 </resources>

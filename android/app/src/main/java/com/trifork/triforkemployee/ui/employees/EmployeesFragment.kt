@@ -9,7 +9,9 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.triforkemployee.R
 import com.example.triforkemployee.databinding.FragmentEmployeesBinding
 import com.trifork.triforkemployee.database.employee.Employee
 import dagger.hilt.android.AndroidEntryPoint
@@ -38,7 +40,6 @@ class EmployeesFragment : Fragment() {
 
         employeesViewModel.employees.observe(viewLifecycleOwner, {
             adapter.submitList(it)
-            Log.d("Fragment", it.toString())
             adapter.notifyDataSetChanged()
         })
 
@@ -46,7 +47,8 @@ class EmployeesFragment : Fragment() {
     }
 
     private fun adapterOnClick(employee: Employee) {
-        Log.d("Fragment", employee.toString())
+        val action = EmployeesFragmentDirections.actionNavEmployeesToNavEmployee(employee.id)
+        findNavController().navigate(action)
     }
 
     override fun onDestroyView() {

@@ -17,8 +17,17 @@ class EmployeeRepository @Inject constructor(
         } catch (e: HttpException) {
             Log.d(TAG, e.toString())
             listOf(
-                Employee( "Jørgen", "Heinsen", "jhe")
+                Employee("0", "Jørgen", "Heinsen", "jhe")
             )
+        }
+    }
+
+    suspend fun getEmployee(id: String): Employee {
+        return try {
+            webservice.getEmployee(id)
+        } catch (e: HttpException) {
+            Log.d(TAG, e.toString())
+            Employee( "0","Jørgen", "Heinsen", "jhe")
         }
     }
 

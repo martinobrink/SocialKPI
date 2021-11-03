@@ -15,6 +15,23 @@
         android:id="@+id/nav_employees"
         android:name="com.trifork.triforkemployee.ui.employees.EmployeesFragment"
         android:label="@string/menu_employees"
-        tools:layout="@layout/fragment_employees" />
+        tools:layout="@layout/fragment_employees" >
+        <action
+            android:id="@+id/action_nav_employees_to_nav_employee"
+            app:destination="@id/nav_employee"
+
+            />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_employee"
+        android:name="com.trifork.triforkemployee.ui.employee.EmployeeFragment"
+        android:label="@string/menu_employee"
+        tools:layout="@layout/fragment_employee" >
+        <argument
+            android:name="employee_id"
+            app:argType="string"
+            />
+    </fragment>
 
 </navigation>

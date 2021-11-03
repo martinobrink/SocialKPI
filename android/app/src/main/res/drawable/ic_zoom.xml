@@ -1,0 +1,30 @@
+<vector android:height="80dp" android:viewportHeight="32"
+    android:viewportWidth="32" android:width="80dp" xmlns:android="http://schemas.android.com/apk/res/android">
+    <group>
+        <clip-path android:pathData="M-200,-353L800,-353v562L-200,209z"/>
+        <path android:fillColor="#4a8cff" android:pathData="M232,-117h366v90L232,-27z"/>
+    </group>
+    <group>
+        <clip-path android:pathData="M-32.1569,-28.0785L124.7061,-28.0785l0,88.157L-32.1569,60.0785z"/>
+        <group>
+            <clip-path android:pathData="M16,16m-16,0a16,16 0,1 1,32.0001 0a16,16 0,1 1,-32.0001 0"/>
+            <path android:fillColor="#e5e5e4" android:pathData="M-0.7843,-0.7844l33.5687,0l0,33.5687L-0.7843,32.7843z"/>
+        </group>
+        <group>
+            <clip-path android:pathData="M16,16m-15.6863,0a15.6863,15.6863 0,1 1,31.3726 0a15.6863,15.6863 0,1 1,-31.3726 0"/>
+            <path android:fillColor="#fff" android:pathData="M-0.4706,-0.4706l32.9412,0l0,32.9412L-0.4706,32.4706z"/>
+        </group>
+        <group>
+            <clip-path android:pathData="M16,16m-14.4314,0a14.4314,14.4314 0,1 1,28.8628 0a14.4314,14.4314 0,1 1,-28.8628 0"/>
+            <path android:fillColor="#4a8cff" android:pathData="M0.7843,0.7843l30.4314,0l0,30.4314L0.7843,31.2157z"/>
+        </group>
+        <group>
+            <clip-path android:pathData="M20.3922,14.127l4.0784,-2.9804c0.3561,-0.2902 0.6275,-0.2227 0.6275,0.3137L25.0981,20.549c0,0.6024 -0.3388,0.5333 -0.6275,0.3137l-4.0784,-2.9804zM6.5882,11.4823l0,6.7765A2.7749,2.7749 0,0 0,9.3757 21.0196l9.8824,0a0.5051,0.5051 0,0 0,0.5067 -0.502L19.7647,13.7412A2.7749,2.7749 45,0 0,16.9773 10.9804l-9.8824,0A0.5051,0.5051 0,0 0,6.5882 11.4823z"/>
+            <path android:fillColor="#fff" android:pathData="M5.8039,10.1961l20.0785,0l0,11.6079L5.8039,21.8039z"/>
+        </group>
+    </group>
+    <group>
+        <clip-path android:pathData="M-200,-353L800,-353v562L-200,209z"/>
+        <path android:fillColor="#90908f" android:pathData="M232,-158.75h180v38.17L232,-120.58z"/>
+    </group>
+</vector>
